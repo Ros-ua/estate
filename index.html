@@ -1,0 +1,456 @@
+<title>Хозяйство Роса</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+:root{
+  --ground:#f2f4f7; --panel:#ffffff; --panel-2:#e9edf3;
+  --ink:#141a22; --ink-2:#4a5766; --ink-3:#7b8798; --line:#d3dae4;
+  --accent:#b45309; --accent-soft:#fdf0dd;
+  --live:#0f7a52; --live-soft:#dcf1e7;
+  --warn:#9a6207; --warn-soft:#fbeecd;
+  --risk:#a52f38; --risk-soft:#fadfe1;
+  --idle:#5b6472; --idle-soft:#e4e8ee;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0e1319; --panel:#161d26; --panel-2:#1e2733;
+    --ink:#e6ebf2; --ink-2:#a4b0c0; --ink-3:#74808f; --line:#2a3644;
+    --accent:#e9a13b; --accent-soft:#2e2314;
+    --live:#4cc38a; --live-soft:#12291f;
+    --warn:#d9a441; --warn-soft:#2b2314;
+    --risk:#e8737d; --risk-soft:#2e1719;
+    --idle:#8c97a6; --idle-soft:#212a35;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0e1319; --panel:#161d26; --panel-2:#1e2733;
+  --ink:#e6ebf2; --ink-2:#a4b0c0; --ink-3:#74808f; --line:#2a3644;
+  --accent:#e9a13b; --accent-soft:#2e2314;
+  --live:#4cc38a; --live-soft:#12291f;
+  --warn:#d9a441; --warn-soft:#2b2314;
+  --risk:#e8737d; --risk-soft:#2e1719;
+  --idle:#8c97a6; --idle-soft:#212a35;
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);
+  font-family:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;font-size:15px;line-height:1.55}
+.wrap{max-width:1180px;margin:0 auto;padding:40px 22px 80px}
+
+header{border-bottom:2px solid var(--ink);padding-bottom:20px;margin-bottom:34px}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--accent);margin:0 0 10px}
+h1{font-family:"IBM Plex Sans Condensed","IBM Plex Sans",sans-serif;font-weight:700;
+  font-size:clamp(30px,5vw,46px);line-height:1.05;margin:0 0 12px;text-wrap:balance;letter-spacing:-.01em}
+.lede{margin:0;color:var(--ink-2);max-width:64ch}
+.tally{display:flex;flex-wrap:wrap;gap:26px;margin-top:22px}
+.tally div{display:flex;flex-direction:column}
+.tally b{font-family:"IBM Plex Mono",monospace;font-size:24px;font-weight:600;font-variant-numeric:tabular-nums}
+.tally span{font-size:12px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.07em}
+
+section{margin-bottom:46px}
+h2{font-family:"IBM Plex Sans Condensed","IBM Plex Sans",sans-serif;font-size:21px;
+  font-weight:700;margin:0 0 4px;letter-spacing:-.005em}
+.sub{color:var(--ink-3);font-size:13.5px;margin:0 0 18px;max-width:78ch}
+h3.grp{font-family:"IBM Plex Mono",monospace;font-size:11.5px;text-transform:uppercase;
+  letter-spacing:.1em;color:var(--accent);margin:26px 0 8px;font-weight:500}
+
+.zones{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:18px}
+.zone{background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--accent);padding:20px}
+.zone.tight{border-top-color:var(--risk)}
+.zone h3{font-family:"IBM Plex Sans Condensed","IBM Plex Sans",sans-serif;font-size:17px;margin:0 0 2px;font-weight:700}
+.addr{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-3);margin:0 0 14px}
+.spec{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-2);
+  background:var(--panel-2);padding:7px 9px;margin:0 0 14px;line-height:1.5}
+.runs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.runs li{display:flex;gap:9px;align-items:baseline;font-size:14px}
+.dot{width:7px;height:7px;border-radius:50%;flex:0 0 7px;margin-top:6px}
+.dot.live{background:var(--live)} .dot.warn{background:var(--warn)}
+.dot.risk{background:var(--risk)} .dot.idle{background:var(--idle)}
+.runs .what{font-weight:500}
+.runs .note{color:var(--ink-3);font-size:12.5px;display:block;margin-top:1px}
+
+.scroll{overflow-x:auto;border:1px solid var(--line);background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:13.5px}
+th{text-align:left;font-family:"IBM Plex Mono",monospace;font-size:11px;text-transform:uppercase;
+  letter-spacing:.08em;color:var(--ink-3);padding:11px 14px;border-bottom:1px solid var(--line);
+  font-weight:500;white-space:nowrap}
+td{padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:none}
+code{font-family:"IBM Plex Mono",monospace;font-size:12.5px;background:var(--panel-2);padding:1px 5px}
+td .tiny{display:block;color:var(--ink-3);font-size:12px;margin-top:2px}
+
+.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:14px}
+.link{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--warn);padding:15px 17px}
+.link.hot{border-left-color:var(--risk)}
+.link h4{margin:0 0 7px;font-size:14.5px;font-weight:600}
+.link p{margin:0;font-size:13px;color:var(--ink-2)}
+.chain{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink);background:var(--panel-2);
+  padding:6px 9px;margin:9px 0 0;display:block;overflow-x:auto;white-space:nowrap}
+
+.dates{display:flex;flex-direction:column;border-left:2px solid var(--line)}
+.date{display:grid;grid-template-columns:88px 1fr;gap:16px;padding:13px 0 13px 18px;
+  border-bottom:1px solid var(--line);position:relative}
+.date:last-child{border-bottom:none}
+.date::before{content:"";position:absolute;left:-6px;top:19px;width:9px;height:9px;
+  border-radius:50%;background:var(--idle);border:2px solid var(--ground)}
+.date.soon::before{background:var(--risk)}
+.date.mid::before{background:var(--warn)}
+.when{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:13px;font-variant-numeric:tabular-nums}
+.what2 strong{display:block;font-size:14px;margin-bottom:2px}
+.what2 span{color:var(--ink-2);font-size:13px}
+
+.tag{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:10.5px;text-transform:uppercase;
+  letter-spacing:.06em;padding:2px 7px;margin-left:6px;vertical-align:1px;white-space:nowrap}
+.t-live{background:var(--live-soft);color:var(--live)}
+.t-warn{background:var(--warn-soft);color:var(--warn)}
+.t-risk{background:var(--risk-soft);color:var(--risk)}
+.t-idle{background:var(--idle-soft);color:var(--idle)}
+
+footer{margin-top:60px;padding-top:18px;border-top:1px solid var(--line);color:var(--ink-3);font-size:12.5px}
+@media (max-width:560px){.date{grid-template-columns:1fr;gap:3px}.tally{gap:18px}}
+</style>
+
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">Собрано живыми проверками · 24 августа 2026</p>
+  <h1>Хозяйство Роса</h1>
+  <p class="lede">Три площадки, восемь проектов, тридцать с лишним внешних сервисов.
+  Карта отвечает на четыре вопроса: что где живёт, какой ключ в каком проекте,
+  кто с кем делит квоту и что скоро истечёт.</p>
+  <div class="tally">
+    <div><b>3</b><span>площадки</span></div>
+    <div><b>8</b><span>проектов</span></div>
+    <div><b>12</b><span>работников флота</span></div>
+    <div><b>34</b><span>внешних сервиса</span></div>
+    <div><b>7</b><span>общих ключей</span></div>
+  </div>
+</header>
+
+<section>
+  <h2>Коротко</h2>
+  <p class="sub">Если читать некогда — вот всё, что требует внимания. Остальное ниже, подробно.</p>
+  <div class="links">
+    <div class="link hot">
+      <h4>🔴 1 сентября — продление доступа к Instagram</h4>
+      <p>Раз в месяц служебный доступ GitHub переписывает токен Meta. Не сработает — заметим
+      не сразу, а когда в конце сентября разом погаснут все семь сценариев.</p>
+    </div>
+    <div class="link hot">
+      <h4>🔴 31 августа — версия системы на серверах уходит с поддержки</h4>
+      <p>Одна дата держит всё: бота, VPN, приложение, агента, книги, сторожа форума.
+      Не выключение — всё продолжит работать. Обновление запланировано отдельной задачей.</p>
+    </div>
+    <div class="link">
+      <h4>✅ Ротация ключей бота — настоящая</h4>
+      <p>Проверено в консоли Google: пять ключей лежат в пяти разных проектах, а лимит
+      считается по проекту. Значит квоты раздельные, и переключение при отказе работает.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Где что живёт</h2>
+  <p class="sub">Три места делят всё хозяйство. Своих серверов больше, но на остальных — чужие боты.</p>
+  <div class="zones">
+
+    <div class="zone">
+      <h3>Ноутбук</h3>
+      <p class="addr">Windows 10 · весь флот и все ключи</p>
+      <p class="spec">Правки всегда здесь.<br>Ни один сервер сам себя не редактирует.</p>
+      <ul class="runs">
+        <li><span class="dot live"></span><span><span class="what">Флот работников</span>
+          <span class="note">3 программы-помощника + 8 моделей по ключу</span></span></li>
+        <li><span class="dot live"></span><span><span class="what">Шесть репозиториев</span>
+          <span class="note">пять с выкладкой наружу, RF — только локально</span></span></li>
+        <li><span class="dot warn"></span><span><span class="what">Уборщик диска</span>
+          <span class="note">работает в простое, удаляет по-настоящему, карантин 2 дня</span></span></li>
+      </ul>
+    </div>
+
+    <div class="zone">
+      <h3>Хорёк</h3>
+      <p class="addr">Амстердам · 2 ГБ памяти · занято 16% диска</p>
+      <p class="spec">Четыре независимых хозяина ключей<br>на одной машине. Запас есть.</p>
+      <ul class="runs">
+        <li><span class="dot live"></span><span><span class="what">Тоби — бот в чатах</span>
+          <span class="note">17 ключей, карта знаний на 1410 фактов, самый прожорливый</span></span></li>
+        <li><span class="dot live"></span><span><span class="what">VPN Роса</span>
+          <span class="note">постоянный туннель — ронять нельзя</span></span></li>
+        <li><span class="dot live"></span><span><span class="what">Сервер приложения Bothly</span>
+          <span class="note">зажат в 250 МБ, чтобы не мешать VPN</span></span></li>
+        <li><span class="dot live"></span><span><span class="what">Книги, сторож форума, статистика</span>
+          <span class="note">три задачи по расписанию, у каждой свой Telegram-бот</span></span></li>
+      </ul>
+    </div>
+
+    <div class="zone tight">
+      <h3>Vultr</h3>
+      <p class="addr">455 МБ памяти · свободно 88 МБ · диск 77%</p>
+      <p class="spec">Тесно. Ночной перезапуск и сторож<br>памяти держат машину на плаву.</p>
+      <ul class="runs">
+        <li><span class="dot live"></span><span><span class="what">OpenClaw — агент в Telegram</span>
+          <span class="note">296 МБ памяти, 6 задач по расписанию, 8 внешних сервисов</span></span></li>
+        <li><span class="dot idle"></span><span><span class="what">Остатки после переезда Тоби</span>
+          <span class="note">расписания закомментированы, дублей не будет</span></span></li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<section>
+  <h2>Флот работников</h2>
+  <p class="sub">Живая проверка 24.08: спрошен каждый настоящим запросом. Двенадцать ответили, один остался непроверенным.</p>
+
+  <h3 class="grp">Программы на ноутбуке — работают без ключа в коде</h3>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>Работник</th><th>Версия</th><th>Ответ</th><th>За что берётся</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Gemini CLI</strong></td><td><code>0.56.0</code></td><td>6 с <span class="tag t-live">жив</span></td>
+            <td>поток, классификация, разбор логов<span class="tiny">свой ключ, не бота</span></td></tr>
+        <tr><td><strong>Codex CLI</strong></td><td><code>0.149.1</code></td><td>18 с <span class="tag t-live">жив</span></td>
+            <td>черновики кода и ревью<span class="tiny">платный, один лимит на все сессии</span></td></tr>
+        <tr><td><strong>Cursor CLI</strong></td><td><code>2026.07.23</code></td><td>19 с <span class="tag t-live">жив</span></td>
+            <td>беречь — крошечный лимит<span class="tiny">24.08 разово сорвался, на трёх повторах 3 из 3</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="grp">Модели по ключу — их же использует бот как резервы</h3>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>Работник</th><th>Ответ</th><th>Лимит</th><th>Кто ещё им пользуется</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Qwen</strong> <span class="tiny">Alibaba, Сингапур</span></td><td>1 с <span class="tag t-live">жив</span></td>
+            <td>70 млн токенов до 11.11</td><td>резерв бота</td></tr>
+        <tr><td><strong>Groq</strong></td><td>3 с <span class="tag t-live">жив</span></td>
+            <td>ловил отказы по частоте</td><td>бот — дешёвые классификаторы; OpenClaw — распознавание речи</td></tr>
+        <tr><td><strong>NVIDIA</strong></td><td>3 с <span class="tag t-live">жив</span></td>
+            <td>40 запросов в минуту</td><td>резерв бота; OpenClaw — зрение</td></tr>
+        <tr><td><strong>Z.AI</strong></td><td>15 с <span class="tag t-live">жив</span></td>
+            <td>—</td><td>резерв бота; <strong>основная модель OpenClaw</strong></td></tr>
+        <tr><td><strong>Cloudflare</strong></td><td>4 с <span class="tag t-live">жив</span></td>
+            <td>отдельная квота, самый ровный</td><td>первый резерв бота; у OpenClaw ещё и поиск по памяти</td></tr>
+        <tr><td><strong>OpenRouter</strong></td><td>4 с <span class="tag t-live">жив</span></td>
+            <td>ключ общий — ловит отказы</td><td>последний резерв OpenClaw. <strong>У бота объявлен, но не вызывается</strong></td></tr>
+        <tr><td><strong>Kaggle-прокси</strong></td><td>3 с <span class="tag t-live">жив</span></td>
+            <td>$10 в день, ключ живёт 2 часа</td><td>только ноутбук; боевого потребителя сейчас нет</td></tr>
+        <tr><td><strong>Google</strong> <span class="tiny">через конфиг OpenClaw</span></td>
+            <td><span class="tag t-idle">не проверен</span></td>
+            <td>—</td><td>конфиг живёт на Vultr, с ноутбука не виден</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2>Какой сервис в каком проекте</h2>
+  <p class="sub">Главная таблица. Собрана не по документации, а по коду — что проект действительно вызывает.</p>
+
+  <h3 class="grp">Мозги — модели, отвечающие людям</h3>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>Сервис</th><th>Где ключ</th><th>Кто вызывает</th><th>Ограничение</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Google Gemini</strong><span class="tiny">четыре разных ключа</span></td>
+            <td>у бота — три в ротации; у флота — свой; ещё один в секретах дизеля</td>
+            <td>Тоби (разговор, синтез), OpenClaw (резерв, зрение, картинки), Gemini CLI, озвучка Reels</td>
+            <td>1000 запросов в сутки на ключ<span class="tiny">из-за этого бот молчал полдня 07.08</span></td></tr>
+        <tr><td><strong>Z.AI</strong></td><td>у бота и в конфиге OpenClaw — один ключ</td>
+            <td>OpenClaw (основная модель), Тоби (резерв)</td>
+            <td>нужен особый режим, иначе ответ приходит пустым</td></tr>
+        <tr><td><strong>Cloudflare Workers AI</strong></td><td>тот же ключ в обоих местах</td>
+            <td>Тоби (первый резерв и голосование), OpenClaw (резерв + поиск по памяти)</td>
+            <td>своя квота, не пересекается с Google</td></tr>
+        <tr><td><strong>Groq</strong></td><td>тот же ключ в обоих местах</td>
+            <td>Тоби (классификаторы), OpenClaw (распознавание голосовых)</td>
+            <td>понижен 23.08 — ловил отказы по частоте</td></tr>
+        <tr><td><strong>NVIDIA</strong></td><td>тот же ключ в обоих местах</td>
+            <td>Тоби (резерв), OpenClaw (зрение)</td>
+            <td>40 запросов в минуту, общий счётчик</td></tr>
+        <tr><td><strong>OpenRouter</strong></td><td>тот же ключ в обоих местах</td>
+            <td>только OpenClaw</td>
+            <td>к боту подключать нельзя — отберёт квоту у соседа</td></tr>
+        <tr><td><strong>Alibaba Qwen</strong></td><td>у бота</td><td>Тоби (резерв), флот с ноутбука</td>
+            <td>бесплатные 70 млн токенов до 11 ноября</td></tr>
+        <tr><td><strong>Kaggle-прокси</strong></td><td>ноутбук, обновляется командой</td><td>флот</td>
+            <td>$10 в день, ключ протухает за 2 часа</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="grp">Ключи Gemini поимённо — сверено с консолью Google 24.08</h3>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>Ключ</th><th>Проект Google</th><th>Кто использует</th><th>Тариф</th></tr></thead>
+      <tbody>
+        <tr><td><strong>боевой</strong></td><td><code>Toby</code></td>
+            <td>Тоби, <strong>первый в ротации</strong> — ответы людям</td><td>бесплатный</td></tr>
+        <tr><td><strong>замерный</strong></td><td><code>Tobyadd</code></td>
+            <td>Тоби, второй в ротации · <strong>все замеры</strong> · отпечатки карты знаний</td>
+            <td>бесплатный</td></tr>
+        <tr><td><strong>агента</strong></td><td><code>claw</code></td>
+            <td>Тоби, третий в ротации · <strong>OpenClaw</strong>: резерв, зрение, аудио, рисование</td>
+            <td>бесплатный</td></tr>
+        <tr><td><strong>флотский</strong></td><td><code>Gemini&nbsp;Project</code></td>
+            <td><strong>Gemini CLI</strong> · озвучка роликов в дизель-мониторе</td><td>бесплатный</td></tr>
+        <tr><td><strong>одолженный</strong></td><td><code>free&nbsp;tier</code></td>
+            <td>отдан постороннему человеку · будет удалён</td><td><strong>платный</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="sub" style="margin-top:12px">
+    <strong>Почему раскладка решает:</strong> Google считает лимит <strong>по проекту</strong>, а не по
+    ключу. Пять ключей в пяти проектах — пять раздельных квот, значит ротация бота настоящая,
+    а не видимость. Это был открытый вопрос, и консоль его закрыла.<br>
+    ⛔ <strong>Проект «free tier» — не мусор, вопреки имени.</strong> В нём живёт вход, через который
+    работают YouTube, почта и Диск. Когда одолженный ключ удалят, проект станет выглядеть пустым —
+    удалять его нельзя.
+  </p>
+
+  <h3 class="grp">Поиск, погода, данные</h3>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>Сервис</th><th>Ключ</th><th>Кто вызывает</th><th>Ограничение</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Tavily</strong> — веб-поиск</td><td>три ключа с автоматической ротацией</td>
+            <td>Тоби и OpenClaw<span class="tiny">первый ключ у них общий</span></td>
+            <td>1000 запросов в месяц на ключ; израсходовано 234</td></tr>
+        <tr><td><strong>Open-Meteo</strong> + <strong>обсерватория Гонконга</strong></td><td>не нужен</td>
+            <td>Тоби — погода и тайфуны для трёх городов</td><td>—</td></tr>
+        <tr><td><strong>Telegra.ph</strong></td><td>не нужен</td><td>Тоби — полный текст статей канала</td><td>—</td></tr>
+        <tr><td><strong>lols.bot</strong> и <strong>cas.chat</strong></td><td>не нужен</td>
+            <td>Тоби — проверка новичков в группе</td><td>—</td></tr>
+        <tr><td><strong>Pollinations</strong></td><td>не нужен</td><td>OpenClaw — рисование картинок</td><td>—</td></tr>
+        <tr><td><strong>Минфин, НБУ, Yahoo, Wayback</strong></td><td>не нужен</td>
+            <td>дизель-монитор — цены, курс, нефть, история</td><td>падение источника ломает сбор</td></tr>
+        <tr><td><strong>Overpass</strong> и <strong>10 новостных лент</strong></td><td>не нужен</td>
+            <td>дизель-монитор — зарядки и новости</td><td>—</td></tr>
+        <tr><td><strong>Форум 4PDA</strong></td><td>не нужен</td>
+            <td>слежка за релизами<span class="tiny">только с сервера — облаку GitHub форум отказывает</span></td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="grp">Личные сервисы Роса</h3>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>Сервис</th><th>Ключ</th><th>Кто вызывает</th><th>Ограничение</th></tr></thead>
+      <tbody>
+        <tr><td><strong>YouTube</strong></td><td rowspan="3" style="vertical-align:middle">
+              <strong>один доступ Google на три сервиса</strong>
+              <span class="tiny">заведён в проекте с обманчивым именем «free tier» — удалять нельзя</span></td>
+            <td>чистка плейлистов с ноутбука и воркер книг на хорьке</td>
+            <td>10 000 единиц в сутки — <strong>общие на всех</strong></td></tr>
+        <tr><td><strong>Почта</strong></td><td>чтение, отправка и правка писем</td><td>—</td></tr>
+        <tr><td><strong>Диск</strong></td><td>разбор занятого места</td>
+            <td>только чтение сведений; доступ протух 2 августа</td></tr>
+        <tr><td><strong>Instagram</strong></td><td>секрет дизель-монитора</td>
+            <td>7 сценариев: карусель цен, новости, ролики, сторис, сводка, мост</td>
+            <td>токен живёт 60 дней; мост отключён с 22.08 — выбрал лимит</td></tr>
+        <tr><td><strong>Telegram</strong></td><td>пять разных ботов и две личные сессии</td>
+            <td>Тоби, OpenClaw, канал релизов, канал дизеля, отчёты воркера</td>
+            <td>одна сессия — одна программа, иначе обе падают</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="grp">Служебное</h3>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>Сервис</th><th>Ключ</th><th>Кто вызывает</th><th>Ограничение</th></tr></thead>
+      <tbody>
+        <tr><td><strong>GitHub</strong></td><td>четыре разных доступа</td>
+            <td>сборки и выкладки, продление Instagram, статистика сервера, раздача подписки</td>
+            <td>хранилище артефактов 0.5 ГБ на весь аккаунт — сейчас занято 115 МБ</td></tr>
+        <tr><td><strong>Cloudflare</strong> <span class="tiny">не тот, что модели</span></td>
+            <td>отдельный токен на ноутбуке</td><td>выкладка сайта Bothly вручную</td>
+            <td>журналы этим токеном не читаются</td></tr>
+        <tr><td><strong>Подпись приложения</strong></td><td>секрет в репозитории Bothly</td>
+            <td>сборка версии для Google Play</td>
+            <td><strong>потеря = обновления в Play больше не выпустить</strong></td></tr>
+        <tr><td><strong>PocketBase</strong></td><td>ключа нет, вход по учётке пары</td>
+            <td>синхронизация Bothly</td><td>данные шифруются на телефоне</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2>Проекты и как они попадают в бой</h2>
+  <p class="sub">Правки всегда на ноутбуке. Дальше у каждого свой путь.</p>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>Проект</th><th>Где работает</th><th>Путь в бой</th><th>Состояние</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Тоби</strong><span class="tiny">бот-собеседник в чатах</span></td><td>хорёк</td>
+            <td>пуш → на сервере обновление с тестами и откатом при провале</td>
+            <td><span class="tag t-live">жив</span></td></tr>
+        <tr><td><strong>OpenClaw</strong><span class="tiny">агент с выходом в сеть</span></td><td>Vultr</td>
+            <td>правка конфига на месте, перезапуск пульта</td>
+            <td><span class="tag t-live">жив</span></td></tr>
+        <tr><td><strong>Дизель-монитор</strong><span class="tiny">цены на топливо и соцсети</span></td><td>облако GitHub</td>
+            <td>13 сценариев по расписанию, сайт на своём домене</td>
+            <td><span class="tag t-warn">копия отстала</span></td></tr>
+        <tr><td><strong>Bothly</strong><span class="tiny">приложение для пары</span></td><td>телефоны + хорёк</td>
+            <td>сборка в облаке → файл в релизе; сервер синхронизации на хорьке</td>
+            <td><span class="tag t-live">жив</span></td></tr>
+        <tr><td><strong>Книги на YouTube</strong><span class="tiny">пополнение плейлистов</span></td><td>хорёк</td>
+            <td>ежедневно по расписанию; добавлено 5307</td>
+            <td><span class="tag t-live">жив</span></td></tr>
+        <tr><td><strong>Слежка за релизами</strong><span class="tiny">новые версии VPN-клиентов</span></td>
+            <td>облако + хорёк</td><td>две половины: релизы в облаке, форум на сервере</td>
+            <td><span class="tag t-live">жив</span></td></tr>
+        <tr><td><strong>Уборщик диска</strong><span class="tiny">карта и чистка файлов</span></td><td>ноутбук</td>
+            <td>задача Windows, просыпается в простое</td>
+            <td><span class="tag t-warn">удаляет</span></td></tr>
+        <tr><td><strong>Спидтест</strong><span class="tiny">страница проверки VPN</span></td><td>сайт GitHub</td>
+            <td>пуш в основную ветку</td>
+            <td><span class="tag t-idle">18 дней тишины</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2>Что и когда истекает</h2>
+  <p class="sub">Единственные даты, которые сработают сами, без нашего участия.</p>
+  <div class="dates">
+    <div class="date soon">
+      <span class="when">31 авг</span>
+      <span class="what2"><strong>Версия системы на серверах уходит с поддержки</strong>
+        <span>Не выключение: всё продолжит работать. Обновление системы запланировано
+        отдельной задачей — перенос отложен сознательно.</span></span>
+    </div>
+    <div class="date soon">
+      <span class="when">1 сен</span>
+      <span class="what2"><strong>Автопродление доступа к Instagram</strong>
+        <span>Служебный доступ GitHub должен записать новый токен Meta. Не сработает — узнаем
+        не сразу, а когда в конце сентября погаснут публикации.</span></span>
+    </div>
+    <div class="date mid">
+      <span class="when">~30 сен</span>
+      <span class="what2"><strong>Истекает текущий токен Meta</strong>
+        <span>Крайний срок, если продление 1 сентября не прошло.</span></span>
+    </div>
+    <div class="date">
+      <span class="when">11 ноя</span>
+      <span class="what2"><strong>Кончается бесплатная квота Qwen</strong>
+        <span>70 млн токенов за 90 дней. Резервная цепочка бота просто станет короче —
+        строку стоит убрать при первой выкладке после этой даты.</span></span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Собрано 24.08.2026 живыми проверками: обход трёх машин по SSH, опрос каждого работника флота настоящим
+  запросом, разбор кода всех проектов на предмет реальных вызовов, каталог репозиториев и секретов.
+  Карта не хранит ни значений ключей, ни их окончаний, ни адресов машин. Часть разделов (находки обхода и незакрытые места) в публичную версию намеренно не вошла. Числа в ней проверены, а не взяты из записей.
+</footer>
+
+</div>
