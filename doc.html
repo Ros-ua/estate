@@ -260,7 +260,7 @@ footer{margin-top:60px;padding-top:18px;border-top:1px solid var(--line);color:v
         <tr><td><strong>Google Gemini</strong><span class="tiny">четыре разных ключа</span></td>
             <td>у бота — три в ротации; у флота — свой; ещё один в секретах дизеля</td>
             <td>Тоби (разговор, синтез), OpenClaw (резерв, зрение, картинки), Gemini CLI, озвучка Reels</td>
-            <td>1000 запросов в сутки на ключ<span class="tiny">из-за этого бот молчал полдня 07.08</span></td></tr>
+            <td>1000 в сутки <strong>на ключ</strong>, а не всего: у бота в ротации три ключа = 3000, у флота свой<span class="tiny">из-за исчерпания одного ключа бот молчал полдня 07.08</span></td></tr>
         <tr><td><strong>Z.AI</strong></td><td>у бота и в конфиге OpenClaw — один ключ</td>
             <td>OpenClaw (основная модель), Тоби (резерв)</td>
             <td>нужен особый режим, иначе ответ приходит пустым</td></tr>
@@ -320,7 +320,7 @@ footer{margin-top:60px;padding-top:18px;border-top:1px solid var(--line);color:v
       <tbody>
         <tr><td><strong>Tavily</strong> — веб-поиск</td><td>три ключа с автоматической ротацией</td>
             <td>Тоби и OpenClaw<span class="tiny">первый ключ у них общий</span></td>
-            <td>1000 запросов в месяц на ключ; израсходовано 234</td></tr>
+            <td>всего <strong>3000 в месяц</strong> — три ключа по 1000; израсходовано 234 на первом, два запасных нетронуты<span class="tiny">сторож переключает ключ только у агента — бот про это не знает, его запас по факту 1000</span></td></tr>
         <tr><td><strong>Open-Meteo</strong> + <strong>обсерватория Гонконга</strong></td><td>не нужен</td>
             <td>Тоби — погода и тайфуны для трёх городов</td><td>—</td></tr>
         <tr><td><strong>Telegra.ph</strong></td><td>не нужен</td><td>Тоби — полный текст статей канала</td><td>—</td></tr>
