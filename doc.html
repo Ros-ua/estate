@@ -118,15 +118,15 @@ footer{margin-top:60px;padding-top:18px;border-top:1px solid var(--line);color:v
 <header>
   <p class="eyebrow">Собрано живыми проверками · 24 августа 2026</p>
   <h1>Хозяйство Роса</h1>
-  <p class="lede">Три площадки, восемь проектов, тридцать с лишним внешних сервисов.
+  <p class="lede">Шесть площадок, пятнадцать проектов, тридцать внешних сервисов.
   Карта отвечает на четыре вопроса: что где живёт, какой ключ в каком проекте,
   кто с кем делит квоту и что скоро истечёт.</p>
   <div class="tally">
-    <div><b>3</b><span>площадки</span></div>
-    <div><b>8</b><span>проектов</span></div>
+    <div><b>6</b><span>площадок</span></div>
+    <div><b>15</b><span>проектов</span></div>
     <div><b>12</b><span>работников флота</span></div>
-    <div><b>34</b><span>внешних сервиса</span></div>
-    <div><b>7</b><span>общих ключей</span></div>
+    <div><b>30</b><span>внешних сервисов</span></div>
+    <div><b>9</b><span>общих ключей</span></div>
   </div>
 </header>
 
@@ -154,7 +154,7 @@ footer{margin-top:60px;padding-top:18px;border-top:1px solid var(--line);color:v
 
 <section>
   <h2>Где что живёт</h2>
-  <p class="sub">Три места делят всё хозяйство. Своих серверов больше, но на остальных — чужие боты.</p>
+  <p class="sub">Три машины несут почти всё. Есть ещё senko — там свой юзербот и второй VPN, и в обход он не входил; и четыре чужих сервера, которые не трогаем.</p>
   <div class="zones">
 
     <div class="zone">
@@ -182,18 +182,18 @@ footer{margin-top:60px;padding-top:18px;border-top:1px solid var(--line);color:v
           <span class="note">постоянный туннель — ронять нельзя</span></span></li>
         <li><span class="dot live"></span><span><span class="what">Сервер приложения Bothly</span>
           <span class="note">зажат в 250 МБ, чтобы не мешать VPN</span></span></li>
-        <li><span class="dot live"></span><span><span class="what">Книги, сторож форума, статистика</span>
-          <span class="note">три задачи по расписанию, у каждой свой Telegram-бот</span></span></li>
+        <li><span class="dot live"></span><span><span class="what">Книги, сторож форума, статистика, ночной бэкап</span>
+          <span class="note">четыре задачи по расписанию; свой Telegram-бот у трёх, у выгрузки статистики его нет</span></span></li>
       </ul>
     </div>
 
     <div class="zone tight">
       <h3>Vultr</h3>
-      <p class="addr">455 МБ памяти · свободно 88 МБ · диск 77%</p>
+      <p class="addr">455 МБ памяти · свободно скачет 65-152 МБ · диск 77%</p>
       <p class="spec">Тесно. Ночной перезапуск и сторож<br>памяти держат машину на плаву.</p>
       <ul class="runs">
         <li><span class="dot live"></span><span><span class="what">OpenClaw — агент в Telegram</span>
-          <span class="note">296 МБ памяти, 6 задач по расписанию, 8 внешних сервисов</span></span></li>
+          <span class="note">212-261 МБ памяти по замерам, 6 задач по расписанию, 9 внешних сервисов</span></span></li>
         <li><span class="dot idle"></span><span><span class="what">Остатки после переезда Тоби</span>
           <span class="note">расписания закомментированы, дублей не будет</span></span></li>
       </ul>
@@ -204,7 +204,7 @@ footer{margin-top:60px;padding-top:18px;border-top:1px solid var(--line);color:v
 
 <section>
   <h2>Флот работников</h2>
-  <p class="sub">Живая проверка 24.08: спрошен каждый настоящим запросом. Двенадцать ответили, один остался непроверенным.</p>
+  <p class="sub">Живая проверка 24.08: спрошен каждый настоящим запросом. Двенадцать ответили, google остался непроверенным. В таблицах ниже по строке на сервис, а прибор отдельно щупает два ключа Gemini — отсюда 12 проверок при 11 строках.</p>
 
   <h3 class="grp">Программы на ноутбуке — работают без ключа в коде</h3>
   <div class="scroll">
@@ -257,7 +257,7 @@ footer{margin-top:60px;padding-top:18px;border-top:1px solid var(--line);color:v
     <table>
       <thead><tr><th>Сервис</th><th>Где ключ</th><th>Кто вызывает</th><th>Ограничение</th></tr></thead>
       <tbody>
-        <tr><td><strong>Google Gemini</strong><span class="tiny">четыре разных ключа</span></td>
+        <tr><td><strong>Google Gemini</strong><span class="tiny">пять ключей, каждый в своём проекте</span></td>
             <td>у бота — три в ротации; у флота — свой; ещё один в секретах дизеля</td>
             <td>Тоби (разговор, синтез), OpenClaw (резерв, зрение, картинки), Gemini CLI, озвучка Reels</td>
             <td>1000 в сутки <strong>на ключ</strong>, а не всего: у бота в ротации три ключа = 3000, у флота свой<span class="tiny">из-за исчерпания одного ключа бот молчал полдня 07.08</span></td></tr>
@@ -322,10 +322,10 @@ footer{margin-top:60px;padding-top:18px;border-top:1px solid var(--line);color:v
             <td>Тоби и OpenClaw<span class="tiny">первый ключ у них общий</span></td>
             <td>всего <strong>3000 в месяц</strong> — три ключа по 1000; израсходовано 234 на первом, два запасных нетронуты<span class="tiny">сторож переключает ключ только у агента — бот про это не знает, его запас по факту 1000</span></td></tr>
         <tr><td><strong>Open-Meteo</strong> + <strong>обсерватория Гонконга</strong></td><td>не нужен</td>
-            <td>Тоби — погода и тайфуны для трёх городов</td><td>—</td></tr>
+            <td>Тоби — погода для четырёх городов, тайфуны для двух южных</td><td>—</td></tr>
         <tr><td><strong>Telegra.ph</strong></td><td>не нужен</td><td>Тоби — полный текст статей канала</td><td>—</td></tr>
         <tr><td><strong>lols.bot</strong> и <strong>cas.chat</strong></td><td>не нужен</td>
-            <td>Тоби — проверка новичков в группе</td><td>—</td></tr>
+            <td>Тоби — только ручные команды владельца; автопроверка новичков устроена иначе</td><td>—</td></tr>
         <tr><td><strong>Pollinations</strong></td><td>не нужен</td><td>OpenClaw — рисование картинок</td><td>—</td></tr>
         <tr><td><strong>Минфин, НБУ, Yahoo, Wayback</strong></td><td>не нужен</td>
             <td>дизель-монитор — цены, курс, нефть, история</td><td>падение источника ломает сбор</td></tr>
@@ -354,7 +354,7 @@ footer{margin-top:60px;padding-top:18px;border-top:1px solid var(--line);color:v
             <td>7 сценариев: карусель цен, новости, ролики, сторис, сводка, мост</td>
             <td>токен живёт 60 дней; мост отключён с 22.08 — выбрал лимит</td></tr>
         <tr><td><strong>Telegram</strong></td><td>пять разных ботов и две личные сессии</td>
-            <td>Тоби, OpenClaw, канал релизов, канал дизеля, отчёты воркера</td>
+            <td>OpenClaw, канал релизов, канал дизеля, отчёты воркера, сторож форума — Тоби работает личной сессией, а не ботом</td>
             <td>одна сессия — одна программа, иначе обе падают</td></tr>
       </tbody>
     </table>
@@ -395,7 +395,7 @@ footer{margin-top:60px;padding-top:18px;border-top:1px solid var(--line);color:v
             <td>правка конфига на месте, перезапуск пульта</td>
             <td><span class="tag t-live">жив</span></td></tr>
         <tr><td><strong>Дизель-монитор</strong><span class="tiny">цены на топливо и соцсети</span></td><td>облако GitHub</td>
-            <td>13 сценариев по расписанию, сайт на своём домене</td>
+            <td>13 сценариев, по расписанию из них 8; сайт на своём домене</td>
             <td><span class="tag t-warn">копия отстала</span></td></tr>
         <tr><td><strong>Bothly</strong><span class="tiny">приложение для пары</span></td><td>телефоны + хорёк</td>
             <td>сборка в облаке → файл в релизе; сервер синхронизации на хорьке</td>
@@ -441,14 +441,14 @@ footer{margin-top:60px;padding-top:18px;border-top:1px solid var(--line);color:v
     <div class="date">
       <span class="when">11 ноя</span>
       <span class="what2"><strong>Кончается бесплатная квота Qwen</strong>
-        <span>70 млн токенов за 90 дней. Резервная цепочка бота просто станет короче —
+        <span>~1 млн токенов на модель, а не 70 млн на всех: 70 набирается только по всему каталогу, а у бота модель одна. Резервная цепочка бота просто станет короче —
         строку стоит убрать при первой выкладке после этой даты.</span></span>
     </div>
   </div>
 </section>
 
 <footer>
-  Собрано 24.08.2026 живыми проверками: обход трёх машин по SSH, опрос каждого работника флота настоящим
+  Собрано 24.08.2026 живыми проверками: обход двух машин по SSH, опрос каждого работника флота настоящим
   запросом, разбор кода всех проектов на предмет реальных вызовов, каталог репозиториев и секретов.
   Карта не хранит ни значений ключей, ни их окончаний, ни адресов машин. Часть разделов (находки обхода и незакрытые места) в публичную версию намеренно не вошла. Числа в ней проверены, а не взяты из записей.
 </footer>
