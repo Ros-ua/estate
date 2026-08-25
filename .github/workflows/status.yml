@@ -40,17 +40,7 @@ jobs:
         run: |
           # Страница не должна ходить в сеть за своими же данными: обращения
           # режут и блокировщики, и строгие настройки. Вкладываем внутрь.
-          python3 - <<'EOF'
-          import io, re
-          data = io.open("status.json", encoding="utf-8").read().strip()
-          p = "status.html"
-          t = io.open(p, encoding="utf-8").read()
-          t2 = re.sub(r"/\*СЮДА-СОСТОЯНИЕ\*/.*?/\*КОНЕЦ\*/",
-                      "/*СЮДА-СОСТОЯНИЕ*/" + data + "/*КОНЕЦ*/", t, count=1, flags=re.S)
-          assert t2 != t, "метка для вложения не найдена — страница не тронута"
-          io.open(p, "w", encoding="utf-8").write(t2)
-          print("состояние вложено в страницу")
-          EOF
+          python3 вложить.py
 
       - name: Положить на сайт, если изменилось
         run: |
