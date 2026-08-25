@@ -36,14 +36,30 @@ jobs:
           python3 -c "import json;d=json.load(open('новое.json',encoding='utf-8'));assert d.get('модели'),'нет моделей';print('получено моделей:',len(d['модели']))"
           mv новое.json status.json
 
+      - name: Вложить состояние прямо в страницу
+        run: |
+          # Страница не должна ходить в сеть за своими же данными: обращения
+          # режут и блокировщики, и строгие настройки. Вкладываем внутрь.
+          python3 - <<'EOF'
+          import io, re
+          data = io.open("status.json", encoding="utf-8").read().strip()
+          p = "status.html"
+          t = io.open(p, encoding="utf-8").read()
+          t2 = re.sub(r"/\*СЮДА-СОСТОЯНИЕ\*/.*?/\*КОНЕЦ\*/",
+                      "/*СЮДА-СОСТОЯНИЕ*/" + data + "/*КОНЕЦ*/", t, count=1, flags=re.S)
+          assert t2 != t, "метка для вложения не найдена — страница не тронута"
+          io.open(p, "w", encoding="utf-8").write(t2)
+          print("состояние вложено в страницу")
+          EOF
+
       - name: Положить на сайт, если изменилось
         run: |
-          if git diff --quiet -- status.json; then
+          if git diff --quiet -- status.json status.html; then
             echo "состояние не изменилось — коммит не нужен"
             exit 0
           fi
           git config user.name  "сторож моделей"
           git config user.email "noreply@github.com"
-          git add status.json
+          git add status.json status.html
           git commit -m "состояние моделей: $(python3 -c "import json;d=json.load(open('status.json',encoding='utf-8'));print(d['проверено'])")"
           git push
