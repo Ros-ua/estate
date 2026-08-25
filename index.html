@@ -141,7 +141,7 @@ footer a{color:var(--accent)}
   с сервиса на всех, кто им пользуется.</p>
   <div class="tools">
     <input id="q" type="search" placeholder="Поиск: тоби, youtube, хорёк…" autocomplete="off">
-    <span class="hint">То же самое сплошным текстом — <a href="doc.html">карта документом</a></span>
+    <span class="hint"><a href="status.html">состояние моделей</a> · <a href="doc.html">карта документом</a></span>
   </div>
 </header>
 
@@ -523,8 +523,9 @@ function go(id){
 // Сторож на сервере раз в сутки опрашивает каталоги и живыми запросами
 // проверяет каждую нашу модель, а результат кладёт в гист. Страница его читает.
 // Секретов в нём нет: только имена моделей и их состояние.
-const STATUS_URL = "https://gist.githubusercontent.com/Ros-ua/"
-  + "118507dd9b1aadc5a8a2977c08a1c8ec/raw/model_status.json";
+// Файл лежит рядом, на этом же сайте: чтение с чужого адреса браузер резал
+// (ERR_BLOCKED_BY_CLIENT). Сюда его кладёт сценарий раз в сутки.
+const STATUS_URL = "status.json";
 // Какой узел страницы какому провайдеру в реестре соответствует.
 const PROV_OF = {gemini:"google", groq:"groq", nvidia:"nvidia", zai:"zai",
                  "cf-ai":"cloudflare", openrouter:"openrouter", qwen:"qwen"};

@@ -1,0 +1,260 @@
+<title>Состояние моделей</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+:root{
+  --ground:#f2f4f7; --panel:#ffffff; --panel-2:#e9edf3;
+  --ink:#141a22; --ink-2:#4a5766; --ink-3:#7b8798; --line:#d3dae4;
+  --accent:#b45309;
+  --ok:#158a5c;   --ok-soft:#dcf1e7;  --ok-bar:#3aa77a;
+  --bad:#b3303a;  --bad-soft:#fadfe1; --bad-bar:#d1454f;
+  --unk:#9a6207;  --unk-soft:#fbeecd; --unk-bar:#d3a13c;
+  --none:#c3cad4;
+  --focus:#b45309;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0e1319; --panel:#161d26; --panel-2:#1e2733;
+    --ink:#e6ebf2; --ink-2:#a4b0c0; --ink-3:#74808f; --line:#2a3644;
+    --accent:#e9a13b;
+    --ok:#4cc38a;   --ok-soft:#12291f;  --ok-bar:#3f9d73;
+    --bad:#e8737d;  --bad-soft:#2e1719; --bad-bar:#c2515a;
+    --unk:#d9a441;  --unk-soft:#2b2314; --unk-bar:#a5813a;
+    --none:#2e3947;
+    --focus:#e9a13b;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0e1319; --panel:#161d26; --panel-2:#1e2733;
+  --ink:#e6ebf2; --ink-2:#a4b0c0; --ink-3:#74808f; --line:#2a3644;
+  --accent:#e9a13b;
+  --ok:#4cc38a;   --ok-soft:#12291f;  --ok-bar:#3f9d73;
+  --bad:#e8737d;  --bad-soft:#2e1719; --bad-bar:#c2515a;
+  --unk:#d9a441;  --unk-soft:#2b2314; --unk-bar:#a5813a;
+  --none:#2e3947;
+  --focus:#e9a13b;
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);
+  font-family:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;font-size:15px;line-height:1.5}
+.wrap{max-width:1000px;margin:0 auto;padding:34px 20px 70px}
+
+header{margin-bottom:24px}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--accent);margin:0 0 8px}
+h1{font-family:"IBM Plex Sans Condensed","IBM Plex Sans",sans-serif;font-weight:700;
+  font-size:clamp(26px,4vw,38px);line-height:1.05;margin:0 0 8px;letter-spacing:-.01em}
+.lede{margin:0;color:var(--ink-2);max-width:62ch;font-size:14.5px}
+.lede a{color:var(--accent)}
+
+/* ── большая полоса: видно с порога, как у status-страниц ── */
+.banner{padding:20px 24px;margin:22px 0 8px;display:flex;flex-wrap:wrap;
+  align-items:baseline;gap:14px;background:var(--ok-soft);color:var(--ok);
+  border:1px solid currentColor}
+.banner.bad{background:var(--bad-soft);color:var(--bad)}
+.banner.wait{background:var(--panel-2);color:var(--ink-3);border-color:var(--line)}
+.banner b{font-family:"IBM Plex Sans Condensed","IBM Plex Sans",sans-serif;
+  font-size:clamp(19px,3vw,25px);font-weight:700}
+.banner .when{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:12px;opacity:.85}
+
+.counts{display:flex;flex-wrap:wrap;gap:22px;margin:0 0 26px;padding:0 2px}
+.counts div{display:flex;flex-direction:column}
+.counts b{font-family:"IBM Plex Mono",monospace;font-size:22px;font-weight:600;
+  font-variant-numeric:tabular-nums}
+.counts span{font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.07em}
+
+h2{font-family:"IBM Plex Mono",monospace;font-size:11.5px;text-transform:uppercase;
+  letter-spacing:.1em;color:var(--accent);margin:26px 0 8px;font-weight:500}
+
+.card{background:var(--panel);border:1px solid var(--line);margin-bottom:10px}
+.row{display:grid;grid-template-columns:1fr auto;gap:14px 18px;padding:14px 18px;
+  align-items:start;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:none}
+.row.dead{background:var(--bad-soft)}
+.mname{font-family:"IBM Plex Mono",monospace;font-size:13.5px;font-weight:500;
+  word-break:break-all}
+.mwhy{color:var(--ink-2);font-size:13px;margin-top:3px}
+.mnote{color:var(--ink-3);font-size:12.5px;margin-top:3px}
+.who{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:10.5px;
+  background:var(--panel-2);color:var(--ink-2);padding:1px 6px;margin:4px 5px 0 0}
+.state{text-align:right;white-space:nowrap}
+.pill{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:10.5px;
+  text-transform:uppercase;letter-spacing:.05em;padding:3px 8px}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.pill.unk{background:var(--unk-soft);color:var(--unk)}
+
+/* ── полосы истории: одна отметка на день проверки ── */
+.bars{display:flex;gap:2px;align-items:flex-end;height:26px;margin-top:8px;
+  justify-content:flex-end}
+.bars i{display:block;width:5px;height:100%;background:var(--none);border-radius:1px}
+.bars i.ok{background:var(--ok-bar)}
+.bars i.bad{background:var(--bad-bar)}
+.bars i.unk{background:var(--unk-bar)}
+.barnote{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--ink-3);
+  margin-top:4px;text-align:right}
+
+.cand{background:var(--panel-2);padding:8px 11px;margin-top:9px;font-size:12.5px;
+  color:var(--ink-2)}
+.cand b{color:var(--ink)}
+
+.skip{background:var(--unk-soft);color:var(--unk);border-left:3px solid currentColor;
+  padding:12px 15px;margin:18px 0;font-size:13.5px}
+.skip ul{margin:6px 0 0;padding-left:18px}
+
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);
+  color:var(--ink-3);font-size:12.5px}
+footer a{color:var(--accent)}
+@media (max-width:620px){
+  .row{grid-template-columns:1fr}
+  .state{text-align:left}
+  .bars{justify-content:flex-start}
+  .barnote{text-align:left}
+}
+</style>
+
+<div class="wrap">
+<header>
+  <p class="eyebrow">Обновляет сторож · каждое утро</p>
+  <h1>Состояние моделей</h1>
+  <p class="lede">Каждое утро сторож спрашивает каталоги провайдеров и живым запросом проверяет
+  каждую модель, на которой мы стоим. Здесь видно, что отвечает, что умерло и чего мы не знаем.
+  Рядом — <a href="index.html">связи хозяйства</a> и <a href="doc.html">карта документом</a>.</p>
+</header>
+
+<div id="banner" class="banner wait"><b>Загружаю состояние…</b></div>
+<div class="counts" id="counts"></div>
+<div id="body"></div>
+
+<footer>
+  Сторож живёт на сервере, где лежат ключи, и публикует только имена моделей и их состояние —
+  ни ключей, ни адресов машин здесь нет. Пустая полоса в истории значит «в этот день не проверяли»,
+  а не «всё хорошо».
+</footer>
+</div>
+
+<script>
+// Состояние лежит рядом, на этом же сайте: страница, читающая чужой адрес,
+// натыкалась на блокировку в браузере. Файл кладёт сюда сценарий раз в сутки.
+const SRC = "status.json";
+
+const PILL = {"жива": ["ok", "отвечает"], "мертва": ["bad", "не отвечает"],
+              "не проверена": ["unk", "не проверена"]};
+
+function el(tag, cls, text){
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+
+function bars(hist){
+  const box = el("div", "bars");
+  const rows = (hist || []).slice(-40);
+  // Слева — пустые места под будущие проверки: видно, что история только копится.
+  for (let i = rows.length; i < 40; i++) box.appendChild(el("i"));
+  rows.forEach(r => {
+    const b = el("i", (PILL[r["с"]] || ["unk"])[0]);
+    b.title = r["д"] + " — " + r["с"];
+    box.appendChild(b);
+  });
+  return box;
+}
+
+function draw(d){
+  const banner = document.getElementById("banner");
+  const counts = document.getElementById("counts");
+  const body = document.getElementById("body");
+  banner.innerHTML = ""; counts.innerHTML = ""; body.innerHTML = "";
+
+  const all = d["модели"] || [];
+  const dead = all.filter(m => m["состояние"] === "мертва");
+  const unk = all.filter(m => m["состояние"] === "не проверена");
+  const ok = all.filter(m => m["состояние"] === "жива");
+
+  banner.className = "banner" + (dead.length ? " bad" : "");
+  banner.appendChild(el("b", dead.length
+    ? (dead.length === 1 ? "Одна модель не отвечает" : dead.length + " моделей не отвечают")
+    : "Все наши модели отвечают"));
+  const when = el("span", "when", "проверено " + (d["проверено"] || "?"));
+  banner.appendChild(when);
+
+  [[ok.length, "отвечают"], [dead.length, "не отвечают"], [unk.length, "не проверены"],
+   [d["моделей_в_каталогах"] || 0, "моделей в каталогах"],
+   [d["провайдеров"] || 0, "провайдеров"]].forEach(([n, label]) => {
+    const c = el("div");
+    c.appendChild(el("b", String(n)));
+    c.appendChild(el("span", null, label));
+    counts.appendChild(c);
+  });
+
+  // Непроверенное — отдельно и до таблиц: это не «всё хорошо».
+  const skipped = d["не_проверено"] || [];
+  if (skipped.length){
+    const s = el("div", "skip");
+    s.appendChild(el("b", "Не проверено — это не «живо»"));
+    const ul = el("ul");
+    skipped.forEach(x => ul.appendChild(el("li", x["что"] + " — " + x["почему"])));
+    s.appendChild(ul);
+    body.appendChild(s);
+  }
+
+  // Группируем по провайдеру, мёртвые провайдеры — наверх.
+  const byProv = {};
+  all.forEach(m => (byProv[m["провайдер"]] = byProv[m["провайдер"]] || []).push(m));
+  const order = Object.keys(byProv).sort((a, b) => {
+    const da = byProv[a].some(m => m["состояние"] === "мертва") ? 0 : 1;
+    const db = byProv[b].some(m => m["состояние"] === "мертва") ? 0 : 1;
+    return da - db || a.localeCompare(b);
+  });
+
+  order.forEach(prov => {
+    body.appendChild(el("h2", null, prov));
+    const card = el("div", "card");
+    byProv[prov].forEach(m => {
+      const st = m["состояние"];
+      const row = el("div", "row" + (st === "мертва" ? " dead" : ""));
+
+      const left = el("div");
+      left.appendChild(el("div", "mname", m["модель"]));
+      if (m["зачем"]) left.appendChild(el("div", "mwhy", m["зачем"]));
+      (m["кто"] || []).forEach(w => left.appendChild(el("span", "who", w)));
+      if (m["особенности"]) left.appendChild(el("div", "mnote", m["особенности"]));
+      if (m["замена"] && m["замена"].length){
+        const c = el("div", "cand");
+        c.appendChild(el("b", "Кандидаты на замену: "));
+        c.appendChild(document.createTextNode(m["замена"].join(", ")
+          + " — подобраны по схожести имени и отвечают, пригодность проверить вручную"));
+        left.appendChild(c);
+      }
+      row.appendChild(left);
+
+      const right = el("div", "state");
+      const p = PILL[st] || ["unk", st];
+      right.appendChild(el("span", "pill " + p[0], p[1]));
+      right.appendChild(bars(m["история"]));
+      const n = (m["история"] || []).length;
+      right.appendChild(el("div", "barnote", n ? "проверок: " + n : "история копится"));
+      row.appendChild(right);
+
+      card.appendChild(row);
+    });
+    body.appendChild(card);
+  });
+}
+
+fetch(SRC + "?t=" + Date.now())
+  .then(r => r.ok ? r.json() : Promise.reject(r.status))
+  .then(draw)
+  .catch(() => {
+    const b = document.getElementById("banner");
+    b.className = "banner wait";
+    b.innerHTML = "";
+    b.appendChild(el("b", "Состояние ещё не выложено"));
+    b.appendChild(el("span", "when",
+      "сторож работает на сервере, а сюда его отчёт попадает раз в сутки"));
+  });
+</script>

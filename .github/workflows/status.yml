@@ -1,0 +1,49 @@
+name: Забрать состояние моделей
+
+# Зачем через облако, а не напрямую со страницы:
+# страница пыталась читать состояние с чужого адреса, и браузер это резал
+# (ERR_BLOCKED_BY_CLIENT — так поступают блокировщики и строгие настройки).
+# Теперь файл лежит на самом сайте, и читать его нечему мешать.
+#
+# Цепочка целиком:
+#   сторож на сервере  →  гист  →  этот сценарий  →  status.json на сайте
+# Ключей провайдеров здесь нет и не нужно: гист публично читаем.
+
+on:
+  schedule:
+    - cron: '0 6 * * *'        # 09:00 по Москве, через час с небольшим после сторожа
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: status
+  cancel-in-progress: false
+
+jobs:
+  забрать:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Скачать состояние из гиста
+        run: |
+          curl -sfL --retry 3 --retry-delay 5 \
+            "https://gist.githubusercontent.com/Ros-ua/118507dd9b1aadc5a8a2977c08a1c8ec/raw/model_status.json" \
+            -o новое.json
+          # Пустой или битый файл на сайт не кладём — лучше старое, чем сломанное.
+          python3 -c "import json;d=json.load(open('новое.json',encoding='utf-8'));assert d.get('модели'),'нет моделей';print('получено моделей:',len(d['модели']))"
+          mv новое.json status.json
+
+      - name: Положить на сайт, если изменилось
+        run: |
+          if git diff --quiet -- status.json; then
+            echo "состояние не изменилось — коммит не нужен"
+            exit 0
+          fi
+          git config user.name  "сторож моделей"
+          git config user.email "noreply@github.com"
+          git add status.json
+          git commit -m "состояние моделей: $(python3 -c "import json;d=json.load(open('status.json',encoding='utf-8'));print(d['проверено'])")"
+          git push
